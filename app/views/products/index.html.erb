@@ -1,0 +1,32 @@
+<h1>All Products</h1>
+<% if @products.any? %>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @products.each do |product| %>
+      <tr>
+        <td><%= product.name %></td>
+        <td><%= truncate(product.description, length: 100) %></td>
+        <td>
+          <%= link_to 'View', product_path(product), class: 'btn btn-sm btn-info' %>
+          <%= link_to 'Edit', edit_product_path(product), class: 'btn btn-sm btn-warning' %>
+          <%= link_to 'Delete', product_path(product),
+                      method: :delete,
+                      data: { confirm: 'Are you sure?' },
+                      class: 'btn btn-sm btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No products found.</p>
+<% end %>
+
+<%= link_to 'Add New Product', new_product_path, class: 'btn btn-primary' %>

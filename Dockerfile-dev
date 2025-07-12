@@ -9,3 +9,5 @@ WORKDIR /rails-app
 
 COPY . .
 RUN bundle install
+
+RUN rails assets:precompile
