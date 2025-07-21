@@ -3,6 +3,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile-dev
+    container_name: rails_app_web
     ports:
       - "3000:3000"
     volumes:

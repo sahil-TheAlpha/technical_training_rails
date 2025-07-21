@@ -5,30 +5,37 @@
 #   gem "sqlite3"
 #
 default: &default
-  adapter: postgresql
+  adapter: sqlite3
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
-  username: <%= ENV["DATABASE_USERNAME"] %>
-  password: <%= ENV["DATABASE_PASSWORD"] %>
-  host: <%= ENV["DATABASE_HOST"] %>
-
 
 development:
   <<: *default
-  database: rails_app_development
+  database: rails_training_app_development
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: rails_app_test
+  database: rails_training_app_test
 
 
 # Store production database in the storage/ directory, which by default
 # is mounted as a persistent Docker volume in config/deploy.yml.
 production:
-  <<: *default
-  database: rails_app_production
-  username: rails_app
-  password: <%= ENV['DATABASE_PASSWORD'] %>
+  primary:
+    <<: *default
+    database: rails_training_app_development_prod
+  cache:
+    <<: *default
+    database: rails_training_app_prod_cache
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *default
+    database: rails_training_app_prod_queue
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *default
+    database: rails_training_app_prod_cable
+    migrations_paths: db/cable_migrate
