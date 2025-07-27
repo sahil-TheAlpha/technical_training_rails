@@ -1,11 +1,31 @@
 services:
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: myapp_development
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
   web:
     build:
       context: ./
       dockerfile: Dockerfile-dev
-    container_name: rails_app_web
+    command: bundle exec rails server -b 0.0.0.0
+    volumes:
+      - .:/rails_app
     ports:
       - "3000:3000"
-    volumes:
-      - .:/rails-app
-    command: rails s -b 0.0.0.0
+    depends_on:
+      - db
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_PASSWORD=password
+
+volumes:
+  postgres_data:

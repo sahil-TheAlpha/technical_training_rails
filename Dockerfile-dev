@@ -1,13 +1,24 @@
-# Base Image
 FROM ruby:3.4.4
 
+RUN apt-get update && apt-get install -y dos2unix && apt-get clean
+
 # Install dependencies
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs
+RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
 
-# Set the working directory
-WORKDIR /rails-app
+# Set working directory
+WORKDIR /rails_app
 
-COPY . .
+# Install bundler
+RUN gem install bundler
+
+# Install gems
+COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
-RUN rails assets:precompile
+COPY . .
+
+# Expose port
+EXPOSE 3000
+
+# Start server with file watching
+CMD ["bin/rails", "server", "-b", "0.0.0.0"]
