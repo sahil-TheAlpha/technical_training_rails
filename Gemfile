@@ -44,6 +44,7 @@ gem "thruster", require: false
 gem 'bootstrap', '~> 5.3.3'
 gem 'dartsass-rails'
 gem 'jquery-rails'
+gem 'pry', '~> 0.15.2'
 
 gem 'dotenv', groups: [:development, :test]
 
